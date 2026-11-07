@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "otterspeak",
+  "main": "./workers/app.ts",
+  "compatibility_date": "2026-11-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "observability": { "enabled": true },
+  "vars": {
+    "AI_BASE_URL": "https://inference.celeris.ai/celeris-1/v1",
+    "AI_MODEL": "celeris-1"
+  },
+  "ratelimits": [{ "name": "LIMIT", "namespace_id": "4401", "simple": { "limit": 30, "period": 60 } }]
+}
