@@ -36,7 +36,7 @@
     --os-line: oklch(0.32 0.004 106);
     --os-ink: oklch(0.95 0.004 106);
     --os-body: oklch(0.86 0.004 106);
-    --os-muted: oklch(0.775 0.004 106);
+    --os-muted: oklch(0.79 0.004 106);
     --os-sea: oklch(0.74 0.14 155);
     --os-sea-edge: oklch(0.62 0.13 155);
     --os-sea-ink: oklch(0.8 0.13 155);
@@ -106,7 +106,7 @@
   .btn-sea {
     color: var(--os-on-sea);
     border-color: var(--os-sea-edge);
-    background: linear-gradient(color-mix(in oklab, var(--os-sea) 82%, white), var(--os-sea));
+    background: linear-gradient(color-mix(in oklab, var(--os-sea) 90%, white), var(--os-sea));
     box-shadow: inset 0 1.5px 0 oklch(1 0 0 / 0.25), inset 0 -0.5px 2px oklch(0 0 0 / 0.2), 0 3px 6px -2px oklch(0.3 0.1 155 / 0.35);
   }
   .btn-sea:hover:not(:disabled) { filter: brightness(1.07); }
