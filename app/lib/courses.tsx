@@ -42,14 +42,16 @@ export const STREAKS = [
   { days: 50, label: "Unstoppable" },
 ];
 
+export const SPEAKS = ["English", "Spanish", "Portuguese", "French", "German", "Italian", "Hindi", "Chinese", "Japanese", "Korean", "Arabic", "Russian", "Turkish", "Dutch"];
+
 export const SOURCES = ["Friends or family", "Google Search", "YouTube", "TikTok", "Instagram or Facebook", "News, article or blog", "GitHub", "Podcast", "Other"];
 
 export function Mark({ c, size = 56 }: { c: Course; size?: number }) {
   return (
     <span
       aria-hidden
-      className="inline-grid shrink-0 place-items-center rounded-xl font-extrabold text-white"
-      style={{ width: size, height: size * 0.74, fontSize: size * 0.32, background: `oklch(0.52 0.13 ${c.hue})`, boxShadow: `inset 0 -${size / 14}px 0 oklch(0.42 0.12 ${c.hue})` }}
+      className="inline-grid shrink-0 place-items-center rounded-lg font-medium text-white"
+      style={{ width: size, height: size * 0.74, fontSize: size * 0.32, background: `oklch(0.5 0.09 ${c.hue})`, boxShadow: `inset 0 1px 0 oklch(1 0 0 / 0.2), 0 0 0 1px oklch(0.4 0.08 ${c.hue})` }}
     >
       {c.mark}
     </span>

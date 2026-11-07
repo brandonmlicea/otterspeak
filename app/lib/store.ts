@@ -9,7 +9,7 @@ export type Exercise =
   | { type: "type"; prompt: string; say?: string; answers: string[] }
   | { type: "pairs"; prompt: string; pairs: [string, string][] };
 export type Lesson = { exercises: Exercise[]; words: string[] };
-export type Track = { course: Course; level: number; outline: Unit[]; done: number };
+export type Track = { course: Course; from?: string; level: number; outline: Unit[]; done: number };
 export type Day = { date: string; xp: number; lessons: number; run: number; best: number };
 
 export type State = {

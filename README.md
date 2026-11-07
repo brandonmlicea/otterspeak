@@ -4,7 +4,8 @@
 
 Live: https://otterspeak.brandonlicea61.workers.dev · Landing: https://otterspeak-landing.brandonlicea61.workers.dev ([source](https://github.com/brandonmlicea/otterspeak-landing))
 
-- **The whole learning loop.** Pick a course, meet Pip, set your level and daily goal, then learn on a path of units and lessons. After your first lesson you set a streak goal and a profile.
+- **Lessons in your language.** Pip asks which language you already speak, writes every instruction in it, and names the direction of each exercise ("Translate into Spanish: …"). A second, quick pass checks each exercise and drops the ones with a wrong or missing answer.
+- **The whole learning loop.** Pick a course, meet Pip, set your language, level and daily goal, then learn on a path of units and lessons. After your first lesson you set a streak goal and a profile.
 - **Five kinds of exercise.** Pick the answer, fill the blank, build a sentence from word tiles, type the answer, match the pairs. Mistakes come back at the end of the lesson, accents are forgiven with a hint, "Why?" asks Pip to explain, and language prompts are read aloud with the browser's own voices.
 - **Game loop.** XP, streaks with a streak goal, 5 hearts that refill one every 30 minutes (or by practising), three daily quests, and a perfect-lesson bonus.
 - **Any course.** 16 languages, math, or anything you type ("chess openings", "music theory"). The course plan is 6 units of 5 lessons, and "Unlock more units" writes the next 6.
@@ -37,7 +38,7 @@ Point it at any other server that speaks the OpenAI chat API, open models includ
 | OpenRouter | `https://openrouter.ai/api/v1` | any model id |
 | OpenAI | `https://api.openai.com/v1` | `gpt-4o-mini` |
 
-Put overrides in `.dev.vars` for local runs. A bigger model writes fewer wrong exercises; the server checks the shape of every exercise and drops the broken ones, but it cannot check the facts.
+Put overrides in `.dev.vars` for local runs. A bigger model writes fewer wrong exercises. The server checks the shape of every exercise, then asks the model to review the lesson and drops what it flags; that catches most mistakes, not all.
 
 ## Deploy
 

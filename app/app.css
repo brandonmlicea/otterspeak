@@ -1,50 +1,54 @@
 @import "tailwindcss";
-@import "@fontsource-variable/nunito";
+@import "@fontsource-variable/geist";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/instrument-serif/400.css";
 
 :root {
-  --os-canvas: #fbf7f0;
-  --os-surface: #ffffff;
-  --os-line: #e7dfd2;
-  --os-ink: #1d2b2f;
-  --os-muted: #5b6b6e;
-  --os-sea: #0b7d75;
-  --os-sea-edge: #075a54;
-  --os-sea-ink: #0b6f68;
-  --os-sea-wash: #def3ef;
-  --os-on-sea: #ffffff;
-  --os-coral: #e8613c;
-  --os-coral-ink: #b8431f;
-  --os-sun: #f2b705;
-  --os-heart: #e5484d;
-  --os-good: #d9f2e6;
-  --os-good-ink: #11633f;
-  --os-bad: #fde3e1;
-  --os-bad-ink: #a3271f;
-  --os-locked: #e9e4da;
-  --os-shade: rgb(29 43 47 / 0.12);
   color-scheme: light;
+  --os-canvas: oklch(0.9693 0.004 106);
+  --os-surface: oklch(0.995 0.002 106);
+  --os-line: oklch(0.89 0.004 106);
+  --os-ink: oklch(0.2435 0 0);
+  --os-body: oklch(0.38 0.002 106);
+  --os-muted: oklch(0.5 0.004 106);
+  --os-sea: oklch(0.52 0.12 155);
+  --os-sea-edge: oklch(0.44 0.11 155);
+  --os-sea-ink: oklch(0.48 0.11 155);
+  --os-sea-wash: oklch(0.94 0.035 155);
+  --os-on-sea: oklch(1 0 0);
+  --os-coral: oklch(0.68 0.17 45);
+  --os-coral-ink: oklch(0.52 0.15 45);
+  --os-sun: oklch(0.82 0.15 85);
+  --os-heart: oklch(0.62 0.2 25);
+  --os-good: oklch(0.94 0.035 155);
+  --os-good-ink: oklch(0.46 0.11 155);
+  --os-bad: oklch(0.93 0.04 25);
+  --os-bad-ink: oklch(0.5 0.16 25);
+  --os-locked: oklch(0.92 0.004 106);
+  --os-shade: oklch(0 0 0 / 0.1);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --os-canvas: #0f1a1c;
-    --os-surface: #16252a;
-    --os-line: #2a3b40;
-    --os-ink: #eef4f2;
-    --os-muted: #a9bbbc;
-    --os-sea: #3cc2b4;
-    --os-sea-edge: #23897f;
-    --os-sea-ink: #5fd3c5;
-    --os-sea-wash: #173a38;
-    --os-on-sea: #0a1517;
-    --os-coral-ink: #ff9d7e;
-    --os-good: #123a2a;
-    --os-good-ink: #8fe0b8;
-    --os-bad: #3d1a17;
-    --os-bad-ink: #ffb3a8;
-    --os-locked: #23353a;
-    --os-shade: rgb(0 0 0 / 0.35);
     color-scheme: dark;
+    --os-canvas: oklch(0.19 0.004 106);
+    --os-surface: oklch(0.235 0.004 106);
+    --os-line: oklch(0.32 0.004 106);
+    --os-ink: oklch(0.95 0.004 106);
+    --os-body: oklch(0.86 0.004 106);
+    --os-muted: oklch(0.775 0.004 106);
+    --os-sea: oklch(0.74 0.14 155);
+    --os-sea-edge: oklch(0.62 0.13 155);
+    --os-sea-ink: oklch(0.8 0.13 155);
+    --os-sea-wash: oklch(0.29 0.05 155);
+    --os-on-sea: oklch(0.17 0.02 155);
+    --os-coral-ink: oklch(0.82 0.12 45);
+    --os-good: oklch(0.29 0.05 155);
+    --os-good-ink: oklch(0.82 0.12 155);
+    --os-bad: oklch(0.3 0.06 25);
+    --os-bad-ink: oklch(0.82 0.1 25);
+    --os-locked: oklch(0.28 0.004 106);
+    --os-shade: oklch(0 0 0 / 0.35);
   }
 }
 
@@ -53,6 +57,7 @@
   --color-surface: var(--os-surface);
   --color-line: var(--os-line);
   --color-ink: var(--os-ink);
+  --color-body: var(--os-body);
   --color-muted: var(--os-muted);
   --color-sea: var(--os-sea);
   --color-sea-ink: var(--os-sea-ink);
@@ -67,60 +72,93 @@
   --color-bad: var(--os-bad);
   --color-bad-ink: var(--os-bad-ink);
   --color-locked: var(--os-locked);
-  --font-sans: "Nunito Variable", ui-rounded, system-ui, sans-serif;
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --font-serif: "Instrument Serif", Georgia, serif;
+}
+
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1.5;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--os-muted);
 }
 
 @layer base {
-  body { @apply bg-canvas text-ink font-sans antialiased; }
-  h1, h2, h3 { font-weight: 800; text-wrap: balance; }
-  :focus-visible { outline: 3px solid var(--os-sea); outline-offset: 3px; border-radius: 14px; }
+  body { @apply bg-canvas text-ink font-sans antialiased; letter-spacing: -0.005em; }
+  h1, h2, h3 { font-weight: 450; letter-spacing: -0.015em; text-wrap: balance; }
+  p { text-wrap: pretty; }
+  ::selection { background: var(--os-sea-wash); }
+  :focus-visible { outline: 2px solid var(--os-sea); outline-offset: 3px; border-radius: 8px; }
   button { cursor: pointer; }
   button:disabled { cursor: default; }
+  * { scrollbar-width: thin; scrollbar-color: var(--os-line) transparent; }
 }
 
 @layer components {
   .btn {
-    @apply inline-flex h-12 items-center justify-center rounded-[14px] px-6 text-[15px] font-extrabold tracking-wide uppercase select-none;
-    border-bottom-width: 4px;
-    transition: transform 0.08s, filter 0.15s;
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded-lg border px-5 text-[15px] font-medium whitespace-nowrap select-none;
+    transition: transform 0.15s ease, filter 0.2s ease;
   }
-  .btn:active:not(:disabled) { transform: translateY(2px); border-bottom-width: 2px; margin-top: 2px; }
-  .btn-sea { background: var(--os-sea); color: var(--os-on-sea); border-color: var(--os-sea-edge); }
-  .btn-sea:hover:not(:disabled) { filter: brightness(1.06); }
-  .btn-ghost { @apply border-2 border-b-4 border-line bg-surface text-sea-ink; }
-  .btn-ghost:hover:not(:disabled) { @apply bg-sea-wash; }
-  .btn-good { background: var(--os-good-ink); color: var(--os-surface); border-color: color-mix(in oklab, var(--os-good-ink), black 25%); }
-  .btn-bad { background: var(--os-bad-ink); color: var(--os-surface); border-color: color-mix(in oklab, var(--os-bad-ink), black 25%); }
-  .btn:disabled { @apply border-locked bg-locked text-muted; }
-  .card { @apply rounded-2xl border-2 border-b-4 border-line bg-surface; }
-  .option { @apply rounded-2xl border-2 border-b-4 border-line bg-surface w-full px-4 py-3 text-left font-bold transition-colors; }
-  .option:hover:not(:disabled) { @apply bg-sea-wash; }
-  .option[aria-pressed="true"] { @apply border-sea bg-sea-wash text-sea-ink; }
-  .bubble {
-    @apply relative rounded-2xl border-2 border-line bg-surface px-4 py-3 text-lg font-bold;
+  .btn:active:not(:disabled) { transform: translateY(1px) scale(0.99); }
+  .btn-sea {
+    color: var(--os-on-sea);
+    border-color: var(--os-sea-edge);
+    background: linear-gradient(color-mix(in oklab, var(--os-sea) 82%, white), var(--os-sea));
+    box-shadow: inset 0 1.5px 0 oklch(1 0 0 / 0.25), inset 0 -0.5px 2px oklch(0 0 0 / 0.2), 0 3px 6px -2px oklch(0.3 0.1 155 / 0.35);
   }
+  .btn-sea:hover:not(:disabled) { filter: brightness(1.07); }
+  .btn-ghost {
+    color: var(--os-ink);
+    background: var(--os-surface);
+    border-color: light-dark(oklch(0 0 0 / 0.1), oklch(1 0 0 / 0.1));
+    box-shadow: inset 0 1.5px 0 light-dark(oklch(1 0 0 / 0.6), oklch(1 0 0 / 0.05)), 0 1px 2px oklch(0 0 0 / 0.08);
+  }
+  .btn-ghost:hover:not(:disabled) { filter: brightness(0.97); }
+  .btn-good { background: var(--os-good-ink); color: var(--os-canvas); border-color: transparent; }
+  .btn-bad { background: var(--os-bad-ink); color: var(--os-canvas); border-color: transparent; }
+  .btn:disabled { background: var(--os-locked); color: var(--os-muted); border-color: var(--os-line); box-shadow: none; filter: none; }
+  .card {
+    @apply rounded-2xl border bg-surface;
+    border-color: light-dark(oklch(0 0 0 / 0.08), oklch(1 0 0 / 0.09));
+    box-shadow: inset 0 1px 0 light-dark(oklch(1 0 0 / 0.7), oklch(1 0 0 / 0.05)), 0 1px 2px oklch(0 0 0 / 0.04), 0 12px 40px -18px oklch(0 0 0 / 0.14);
+  }
+  .option {
+    @apply w-full rounded-xl border bg-surface px-4 py-3 text-left transition-colors;
+    border-color: light-dark(oklch(0 0 0 / 0.1), oklch(1 0 0 / 0.1));
+  }
+  .option:hover:not(:disabled) { border-color: var(--os-sea); }
+  .option[aria-pressed="true"] { border-color: var(--os-sea); background: var(--os-sea-wash); color: var(--os-sea-ink); box-shadow: 0 0 0 1px var(--os-sea); }
+  .bubble { @apply relative rounded-xl border border-line bg-surface px-4 py-3 text-lg; }
   .bubble::before {
     content: "";
     position: absolute;
-    left: -9px;
+    left: -6px;
     top: 50%;
-    width: 14px;
-    height: 14px;
+    width: 10px;
+    height: 10px;
     background: var(--os-surface);
-    border-left: 2px solid var(--os-line);
-    border-bottom: 2px solid var(--os-line);
+    border-left: 1px solid var(--os-line);
+    border-bottom: 1px solid var(--os-line);
     transform: translateY(-50%) rotate(45deg);
   }
-  .tile { @apply rounded-xl border-2 border-b-4 border-line bg-surface px-3 py-2 text-[17px] font-bold; }
-  .tile:disabled { @apply border-locked bg-locked text-transparent; }
-  .bar { @apply h-4 overflow-hidden rounded-full bg-locked; }
+  .tile {
+    @apply rounded-lg border bg-surface px-3 py-2 text-[17px];
+    border-color: light-dark(oklch(0 0 0 / 0.12), oklch(1 0 0 / 0.12));
+    box-shadow: 0 1px 0 light-dark(oklch(0 0 0 / 0.08), oklch(0 0 0 / 0.4));
+  }
+  .tile:hover:not(:disabled) { border-color: var(--os-sea); }
+  .tile:disabled { background: var(--os-locked); color: transparent; box-shadow: none; }
+  .bar { @apply h-2.5 overflow-hidden rounded-full bg-locked; }
   .bar > span { @apply block h-full rounded-full bg-sea transition-[width] duration-500; }
 }
 
 .pip-eyes { transform-origin: 60px 46px; animation: blink 5s infinite; }
 @keyframes blink { 0%, 94%, 100% { transform: scaleY(1); } 97% { transform: scaleY(0.1); } }
-.pop { animation: pop 0.35s cubic-bezier(.3, 1.6, .5, 1); }
-@keyframes pop { from { transform: scale(0.85); opacity: 0; } }
+.pop { animation: pop 0.3s ease-out; }
+@keyframes pop { from { transform: translateY(6px); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) {
   .pip-eyes, .pop { animation: none; }
   .btn, .bar > span { transition: none; }

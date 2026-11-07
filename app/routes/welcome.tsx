@@ -20,7 +20,7 @@ export default function Welcome() {
     <div id="page-welcome" className="min-h-svh">
       <header className="mx-auto flex max-w-5xl items-center justify-between px-5 py-4">
         <Logo />
-        <Link to="/learn" className="text-sm font-extrabold tracking-wide text-muted uppercase hover:text-sea-ink">My progress</Link>
+        <Link to="/learn" className="text-sm font-medium text-muted hover:text-sea-ink">My progress</Link>
       </header>
       <main className="mx-auto max-w-4xl px-5 pb-16">
         <h1 className="mt-8 text-center text-3xl">I want to learn…</h1>
@@ -29,7 +29,7 @@ export default function Welcome() {
             <li key={c.id}>
               <button id={`course-${c.id}`} onClick={() => pick(c)} className="card flex w-full flex-col items-center gap-3 px-4 py-7 hover:bg-sea-wash">
                 <Mark c={c} />
-                <span className="font-extrabold">{c.name}</span>
+                <span className="font-medium">{c.name}</span>
               </button>
             </li>
           ))}
@@ -42,8 +42,8 @@ export default function Welcome() {
             if (topic.trim()) pick(custom(topic));
           }}
         >
-          <label htmlFor="topic" className="shrink-0 font-extrabold">Or learn anything:</label>
-          <input id="topic" value={topic} onChange={(e) => setTopic(e.target.value)} maxLength={60} placeholder="Chess openings, music theory, Python, US history…" className="h-12 min-w-0 flex-1 rounded-xl border-2 border-line bg-canvas px-4 font-semibold outline-none focus:border-sea" />
+          <label htmlFor="topic" className="shrink-0 font-medium">Or learn anything:</label>
+          <input id="topic" value={topic} onChange={(e) => setTopic(e.target.value)} maxLength={60} placeholder="Chess openings, music theory, Python, US history…" className="h-12 min-w-0 flex-1 rounded-xl border border-line bg-canvas px-4 outline-none focus:border-sea" />
           <button className="btn btn-sea" disabled={!topic.trim()}>Start</button>
         </form>
       </main>

@@ -8,9 +8,9 @@ export type Stage = { kind: "done"; xp: number; accuracy: number; seconds: numbe
 
 function Stat({ label, value, tone }: { label: string; value: string; tone: string }) {
   return (
-    <div className="w-28 overflow-hidden rounded-2xl border-2 text-center" style={{ borderColor: tone, background: tone }}>
-      <p className="py-1 text-xs font-black tracking-wide text-[#0a1517] uppercase">{label}</p>
-      <p className="rounded-xl bg-surface py-3 text-xl font-black">{value}</p>
+    <div className="card w-32 px-4 py-3 text-center">
+      <p className="eyebrow flex items-center justify-center gap-1.5"><span className="size-2 rounded-full" style={{ background: tone }} />{label}</p>
+      <p className="mt-1 text-2xl font-medium">{value}</p>
     </div>
   );
 }
@@ -35,7 +35,7 @@ export function After({ stages, done }: { stages: Stage[]; done: () => void }) {
         <h1 className="text-3xl text-sea-ink">{stage.perfect ? "Perfect lesson!" : "Lesson complete!"}</h1>
         <div className="flex flex-wrap justify-center gap-3">
           <Stat label="Total XP" value={`${stage.xp}`} tone="var(--os-sun)" />
-          <Stat label="Accuracy" value={`${stage.accuracy}%`} tone="#3cc2b4" />
+          <Stat label="Accuracy" value={`${stage.accuracy}%`} tone="var(--os-sea)" />
           <Stat label="Time" value={mm} tone="var(--os-coral)" />
         </div>
       </>
@@ -43,7 +43,7 @@ export function After({ stages, done }: { stages: Stage[]; done: () => void }) {
   } else if (stage.kind === "streak") {
     body = (
       <>
-        <div className="flex items-center gap-2 text-5xl font-black text-coral-ink"><Flame size={56} /> {s.streak.count}</div>
+        <div className="flex items-center gap-2 text-5xl font-medium text-coral-ink"><Flame size={56} /> {s.streak.count}</div>
         <h1 className="text-2xl">Let’s commit to learning with a streak goal!</h1>
         <p className="text-muted">A goal makes it easier to show up every day.</p>
         <div className="grid w-full max-w-md gap-3">
@@ -71,10 +71,10 @@ export function After({ stages, done }: { stages: Stage[]; done: () => void }) {
             <li key={q.label} className="card flex items-center gap-3 p-4">
               <Bolt />
               <div className="flex-1">
-                <p className="font-extrabold">{q.label}</p>
+                <p className="font-medium">{q.label}</p>
                 <div className="bar mt-2"><span style={{ width: "100%", background: "var(--os-sun)" }} /></div>
               </div>
-              <span className="font-bold text-muted">{q.need} / {q.need}</span>
+              <span className="font-medium text-muted">{q.need} / {q.need}</span>
             </li>
           ))}
         </ul>
@@ -87,7 +87,7 @@ export function After({ stages, done }: { stages: Stage[]; done: () => void }) {
         <Pip size={150} />
         <h1 className="text-3xl">Time to create a profile!</h1>
         <p className="max-w-sm text-muted">Tell Pip your name. Your progress stays private, on this device.</p>
-        <input id="profile-name" autoFocus value={name} onChange={(e) => setName(e.target.value)} maxLength={40} placeholder="Your name" className="h-12 w-full max-w-sm rounded-xl border-2 border-line bg-surface px-4 text-lg font-bold outline-none focus:border-sea" />
+        <input id="profile-name" autoFocus value={name} onChange={(e) => setName(e.target.value)} maxLength={40} placeholder="Your name" className="h-12 w-full max-w-sm rounded-xl border border-line bg-surface px-4 text-lg font-medium outline-none focus:border-sea" />
       </>
     );
     button = (
@@ -95,13 +95,13 @@ export function After({ stages, done }: { stages: Stage[]; done: () => void }) {
         Create a profile
       </button>
     );
-    later = <button id="profile-later" className="font-extrabold tracking-wide text-sea-ink uppercase" onClick={() => (write((st) => void (st.seen.profile = true)), next())}>Later</button>;
+    later = <button id="profile-later" className="font-medium text-sea-ink" onClick={() => (write((st) => void (st.seen.profile = true)), next())}>Later</button>;
   }
 
   return (
     <div id="page-after" className="flex min-h-svh flex-col">
       <main key={at} className="pop mx-auto flex w-full max-w-2xl flex-1 flex-col items-center justify-center gap-6 px-5 py-10 text-center">{body}</main>
-      <footer className="border-t-2 border-line">
+      <footer className="border-t border-line">
         <div className="mx-auto flex max-w-4xl flex-col-reverse items-center gap-4 px-5 py-6 sm:flex-row sm:justify-end">{later}{button}</div>
       </footer>
     </div>

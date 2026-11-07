@@ -5,8 +5,8 @@ export const GITHUB = "https://github.com/brandonmlicea/otterspeak";
 
 export function Logo({ to = "/" }: { to?: string }) {
   return (
-    <Link to={to} id="logo" className="flex items-center gap-2 text-2xl font-black tracking-tight text-sea-ink">
-      <Pip size={40} />
+    <Link to={to} id="logo" className="flex items-center gap-2 font-serif text-[30px] leading-none text-ink">
+      <Pip size={36} />
       otterspeak
     </Link>
   );

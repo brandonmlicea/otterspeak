@@ -20,16 +20,16 @@ export default function Profile() {
     <div id="page-profile" className="flex min-h-svh">
       <Side />
       <main className="mx-auto w-full max-w-2xl px-5 py-8">
-        <Link to="/learn" className="font-extrabold text-sea-ink lg:hidden">← Learn</Link>
+        <Link to="/learn" className="font-medium text-sea-ink lg:hidden">← Learn</Link>
         <div className="mt-4 flex items-center gap-5">
           <Pip size={110} mood="cheer" />
           <div>
             <h1 className="text-3xl">{s.name || "Learner"}</h1>
-            <p className="font-semibold text-muted">Heard about us from {s.heard || "somewhere nice"}</p>
+            <p className="text-muted">Heard about us from {s.heard || "somewhere nice"}</p>
           </div>
         </div>
         <form className="mt-6 flex gap-3" onSubmit={(e) => (e.preventDefault(), write((st) => ((st.name = name.trim()), (st.seen.profile = true))))}>
-          <input id="profile-name" value={name} onChange={(e) => setName(e.target.value)} maxLength={40} placeholder="Your name" className="h-12 min-w-0 flex-1 rounded-xl border-2 border-line bg-surface px-4 font-bold outline-none focus:border-sea" />
+          <input id="profile-name" value={name} onChange={(e) => setName(e.target.value)} maxLength={40} placeholder="Your name" className="h-12 min-w-0 flex-1 rounded-xl border border-line bg-surface px-4 font-medium outline-none focus:border-sea" />
           <button className="btn btn-sea" disabled={name.trim() === s.name}>Save</button>
         </form>
         <h2 className="mt-10 text-xl">Statistics</h2>
@@ -43,8 +43,8 @@ export default function Profile() {
             <div key={String(label)} className="card flex items-center gap-3 p-4">
               {icon}
               <div>
-                <p className="text-xl font-black">{n}</p>
-                <p className="text-sm font-semibold text-muted">{label}</p>
+                <p className="text-xl font-medium">{n}</p>
+                <p className="text-sm text-muted">{label}</p>
               </div>
             </div>
           ))}
@@ -62,9 +62,9 @@ export default function Profile() {
           ))}
           <li><Link to="/welcome" className="btn btn-ghost w-full">Add a course</Link></li>
         </ul>
-        <div className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t-2 border-line pt-6 text-sm font-bold text-muted">
+        <div className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-6 text-sm font-medium text-muted">
           <a href={GITHUB} className="underline">Otterspeak is open source</a>
-          <button className="font-extrabold tracking-wide text-bad-ink uppercase" onClick={() => confirm("Erase all progress on this device?") && (reset(), go("/welcome"))}>Reset progress</button>
+          <button className="font-medium text-bad-ink" onClick={() => confirm("Erase all progress on this device?") && (reset(), go("/welcome"))}>Reset progress</button>
         </div>
       </main>
     </div>

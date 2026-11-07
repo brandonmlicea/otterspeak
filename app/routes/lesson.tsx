@@ -43,6 +43,7 @@ export default function Lesson() {
     const st = read();
     post<LessonData>("/api/lesson", {
       name: t.course.name,
+      from: t.from ?? "English",
       lang: t.course.lang ?? "",
       level: levelsFor(t.course)[t.level],
       unit: practice ? "Review" : `${unit.title}: ${unit.about}`,
@@ -141,7 +142,7 @@ export default function Lesson() {
       <main className="grid min-h-svh place-items-center text-center">
         <div className="flex flex-col items-center gap-4">
           <Pip size={130} className="animate-bounce motion-reduce:animate-none" />
-          <p className="text-lg font-extrabold">{practice ? "Gathering your words to practise…" : "Getting your lesson ready…"}</p>
+          <p className="text-lg font-medium">{practice ? "Gathering your words to practise…" : "Getting your lesson ready…"}</p>
         </div>
       </main>
     );
@@ -150,31 +151,31 @@ export default function Lesson() {
   return (
     <div id="page-lesson" className="flex min-h-svh flex-col">
       <header className="mx-auto flex w-full max-w-4xl items-center gap-4 px-5 pt-6">
-        <button id="lesson-quit" onClick={() => setQuit(true)} aria-label="Quit lesson" className="text-3xl leading-none font-black text-muted">×</button>
+        <button id="lesson-quit" onClick={() => setQuit(true)} aria-label="Quit lesson" className="text-3xl leading-none font-medium text-muted">×</button>
         <div className="bar flex-1"><span style={{ width: `${(solved / lesson.exercises.length) * 100}%` }} /></div>
-        <span id="lesson-hearts" className="flex items-center gap-1 font-extrabold text-bad-ink" title={practice ? "Practice doesn’t cost hearts" : `${s.hearts.n} hearts`}>
+        <span id="lesson-hearts" className="flex items-center gap-1 font-medium text-bad-ink" title={practice ? "Practice doesn’t cost hearts" : `${s.hearts.n} hearts`}>
           <Heart /> {practice ? "∞" : s.hearts.n}
         </span>
       </header>
       <main key={pos} className="pop mx-auto w-full max-w-2xl flex-1 px-5 py-8">
-        {missed.has(index) && !result && <p className="mb-2 text-sm font-extrabold tracking-wide text-coral-ink uppercase">Previous mistake</p>}
+        {missed.has(index) && !result && <p className="mb-2 text-sm font-medium text-coral-ink">Previous mistake</p>}
         <h1 className="mb-6 text-2xl">{titleOf(ex, t.course.name)}</h1>
         <Exercise ex={ex} lang={t.course.lang} bank={bank} locked={!!result} value={value} set={setValue} solved={() => answer({ ok: true, right: "" })} />
       </main>
-      <footer className={`border-t-2 ${result ? (result.ok ? "border-transparent bg-good" : "border-transparent bg-bad") : "border-line"}`}>
+      <footer className={`border-t ${result ? (result.ok ? "border-transparent bg-good" : "border-transparent bg-bad") : "border-line"}`}>
         <div className="mx-auto flex max-w-4xl flex-col gap-4 px-5 py-6 sm:flex-row sm:items-center sm:justify-between">
           {result ? (
             <div id="lesson-feedback" className={result.ok ? "text-good-ink" : "text-bad-ink"} role="status">
-              <p className="text-2xl font-black">{result.ok ? ["Nice!", "Great job!", "Correct!", "You got it!"][pos % 4] : "Not quite"}</p>
-              {!result.ok && <p className="mt-1 font-bold">Correct answer: {result.right}</p>}
-              {result.note && <p className="mt-1 font-bold">{result.note}</p>}
-              {result.why && <p className="mt-1 max-w-xl font-semibold">{result.why}</p>}
+              <p className="text-2xl font-medium">{result.ok ? ["Nice!", "Great job!", "Correct!", "You got it!"][pos % 4] : "Not quite"}</p>
+              {!result.ok && <p className="mt-1 font-medium">Correct answer: {result.right}</p>}
+              {result.note && <p className="mt-1 font-medium">{result.note}</p>}
+              {result.why && <p className="mt-1 max-w-xl">{result.why}</p>}
               {!result.ok && !result.why && (
                 <button
-                  className="mt-1 text-sm font-extrabold uppercase underline"
+                  className="mt-1 text-sm font-medium underline"
                   onClick={async () => {
                     const given = Array.isArray(value) ? value.map((i) => bank[i]).join(" ") : ex.type === "choose" || ex.type === "fill" ? ex.choices[value as number] : String(value);
-                    const r = await post<{ why: string }>("/api/explain", { name: t.course.name, prompt: ex.prompt, right: result.right, given }).catch(() => ({ why: "Pip couldn’t explain this one right now." }));
+                    const r = await post<{ why: string }>("/api/explain", { name: t.course.name, from: t.from ?? "English", prompt: ex.prompt, right: result.right, given }).catch(() => ({ why: "Pip couldn’t explain this one right now." }));
                     setResult({ ...result, why: r.why });
                   }}
                 >
@@ -198,7 +199,7 @@ export default function Lesson() {
             <Pip mood="sad" size={110} />
             <h2 id="quit-title" className="text-xl">Wait, don’t go! You’ll lose your progress in this lesson.</h2>
             <button autoFocus className="btn btn-sea w-full" onClick={() => setQuit(false)}>Keep learning</button>
-            <Link to="/learn" className="font-extrabold tracking-wide text-bad-ink uppercase">End session</Link>
+            <Link to="/learn" className="font-medium text-bad-ink">End session</Link>
           </div>
         </div>
       )}

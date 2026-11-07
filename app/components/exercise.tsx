@@ -48,7 +48,7 @@ export function Exercise({ ex, lang, bank, locked, value, set, solved }: { ex: E
         <div className="mt-8 grid gap-3 sm:grid-cols-2">
           {ex.choices.map((c, i) => (
             <button key={i} id={`choice-${i}`} disabled={locked} onClick={() => set(i)} aria-pressed={value === i} className="option flex items-center gap-3">
-              <span className="grid size-7 shrink-0 place-items-center rounded-lg border-2 border-line text-sm text-muted">{i + 1}</span>
+              <span className="grid size-7 shrink-0 place-items-center rounded-lg border border-line text-sm text-muted">{i + 1}</span>
               {c}
             </button>
           ))}
@@ -61,7 +61,7 @@ export function Exercise({ ex, lang, bank, locked, value, set, solved }: { ex: E
     return (
       <>
         {prompt}
-        <div id="answer-line" className="mt-8 flex min-h-[7.5rem] flex-wrap content-start gap-2 border-y-2 border-line py-3">
+        <div id="answer-line" className="mt-8 flex min-h-[7.5rem] flex-wrap content-start gap-2 border-y border-line py-3">
           {picked.map((i, at) => (
             <button key={i} className="tile pop" disabled={locked} onClick={() => set(picked.filter((_, j) => j !== at))}>{bank[i]}</button>
           ))}
@@ -87,7 +87,7 @@ export function Exercise({ ex, lang, bank, locked, value, set, solved }: { ex: E
           onChange={(e) => set(e.target.value)}
           lang={lang}
           placeholder="Type your answer"
-          className="mt-8 h-36 w-full resize-none rounded-2xl border-2 border-line bg-surface p-4 text-lg font-semibold outline-none focus:border-sea"
+          className="mt-8 h-36 w-full resize-none rounded-2xl border border-line bg-surface p-4 text-lg outline-none focus:border-sea"
         />
       </>
     );
