@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import { After, type Stage } from "~/components/after";
-import { Exercise, bankOf, grade, titleOf, type Value } from "~/components/exercise";
+import { Exercise, bankOf, grade, type Value } from "~/components/exercise";
 import { Pip } from "~/components/pip";
 import { Heart, Splash } from "~/components/ui";
 import { levelsFor } from "~/lib/courses";
+import { useWords } from "~/lib/words";
 import { MAX_HEARTS, finish, loseHeart, post, questsDone, read, today, track, useStore, write, type Lesson as LessonData } from "~/lib/store";
 
 export const meta = () => [{ title: "Lesson · Otterspeak" }];
@@ -17,11 +18,12 @@ export default function Lesson() {
   const [params] = useSearchParams();
   const go = useNavigate();
   const s = useStore();
+  const w = useWords();
   const practice = params.has("practice");
   const n = Number(params.get("n") ?? 0);
   const [{ t, setupError }] = useState(() => {
     const t = track(read());
-    return { t, setupError: !t ? "No course yet." : !practice && (n > t.done || n >= t.outline.length * 5) ? "That lesson is still locked." : "" };
+    return { t, setupError: !t ? "noCourse" : !practice && (n > t.done || n >= t.outline.length * 5) ? "locked" : "" };
   });
   const [lesson, setLesson] = useState<LessonData | null>(null);
   const [error, setError] = useState(setupError);
@@ -128,11 +130,11 @@ export default function Lesson() {
       <main className="grid min-h-svh place-items-center p-8 text-center">
         <div className="flex max-w-md flex-col items-center gap-4">
           <Pip mood="sad" size={150} />
-          <h1 className="text-2xl">{out ? "You ran out of hearts" : "Pip dropped the pebble"}</h1>
-          <p className="text-muted">{out ? "Hearts come back one every 30 minutes. A practice lesson earns one right away." : error}</p>
+          <h1 className="text-2xl">{out ? w("outTitle") : w("dropped")}</h1>
+          <p className="text-muted">{out ? w("outBody") : error === "noCourse" || error === "locked" ? w(error) : error}</p>
           <div className="flex flex-wrap justify-center gap-3">
-            {out ? <Link to="/lesson?practice" reloadDocument className="btn btn-sea">Practice</Link> : !setupError && <button className="btn btn-sea" onClick={() => setAttempt(attempt + 1)}>Try again</button>}
-            <Link to="/learn" className="btn btn-ghost">Back</Link>
+            {out ? <Link to="/lesson?practice" reloadDocument className="btn btn-sea">{w("practice")}</Link> : !setupError && <button className="btn btn-sea" onClick={() => setAttempt(attempt + 1)}>{w("tryAgain")}</button>}
+            <Link to="/learn" className="btn btn-ghost">{w("back")}</Link>
           </div>
         </div>
       </main>
@@ -142,7 +144,7 @@ export default function Lesson() {
       <main className="grid min-h-svh place-items-center text-center">
         <div className="flex flex-col items-center gap-4">
           <Pip size={130} className="animate-bounce motion-reduce:animate-none" />
-          <p className="text-lg font-medium">{practice ? "Gathering your words to practise…" : "Getting your lesson ready…"}</p>
+          <p className="text-lg font-medium">{practice ? w("gathering") : w("preparing")}</p>
         </div>
       </main>
     );
@@ -151,44 +153,44 @@ export default function Lesson() {
   return (
     <div id="page-lesson" className="flex min-h-svh flex-col">
       <header className="mx-auto flex w-full max-w-4xl items-center gap-4 px-5 pt-6">
-        <button id="lesson-quit" onClick={() => setQuit(true)} aria-label="Quit lesson" className="text-3xl leading-none font-medium text-muted">×</button>
+        <button id="lesson-quit" onClick={() => setQuit(true)} aria-label={w("quitLesson")} className="text-3xl leading-none font-medium text-muted">×</button>
         <div className="bar flex-1"><span style={{ width: `${(solved / lesson.exercises.length) * 100}%` }} /></div>
-        <span id="lesson-hearts" className="flex items-center gap-1 font-medium text-bad-ink" title={practice ? "Practice doesn’t cost hearts" : `${s.hearts.n} hearts`}>
+        <span id="lesson-hearts" className="flex items-center gap-1 font-medium text-bad-ink" title={practice ? w("practiceFree") : `${s.hearts.n} ${w("hearts")}`}>
           <Heart /> {practice ? "∞" : s.hearts.n}
         </span>
       </header>
       <main key={pos} className="pop mx-auto w-full max-w-2xl flex-1 px-5 py-8">
-        {missed.has(index) && !result && <p className="mb-2 text-sm font-medium text-coral-ink">Previous mistake</p>}
-        <h1 className="mb-6 text-2xl">{titleOf(ex, t.course.name)}</h1>
-        <Exercise ex={ex} lang={t.course.lang} bank={bank} locked={!!result} value={value} set={setValue} solved={() => answer({ ok: true, right: "" })} />
+        {missed.has(index) && !result && <p className="mb-2 text-sm font-medium text-coral-ink">{w("previousMistake")}</p>}
+        <h1 className="mb-6 text-2xl">{w(ex.type)}</h1>
+        <Exercise w={w} ex={ex} lang={t.course.lang} bank={bank} locked={!!result} value={value} set={setValue} solved={() => answer({ ok: true, right: "" })} />
       </main>
       <footer className={`border-t ${result ? (result.ok ? "border-transparent bg-good" : "border-transparent bg-bad") : "border-line"}`}>
         <div className="mx-auto flex max-w-4xl flex-col gap-4 px-5 py-6 sm:flex-row sm:items-center sm:justify-between">
           {result ? (
             <div id="lesson-feedback" className={result.ok ? "text-good-ink" : "text-bad-ink"} role="status">
-              <p className="text-2xl font-medium">{result.ok ? ["Nice!", "Great job!", "Correct!", "You got it!"][pos % 4] : "Not quite"}</p>
-              {!result.ok && <p className="mt-1 font-medium">Correct answer: {result.right}</p>}
-              {result.note && <p className="mt-1 font-medium">{result.note}</p>}
+              <p className="text-2xl font-medium">{result.ok ? w((["praise0", "praise1", "praise2", "praise3"] as const)[pos % 4]) : w("notQuite")}</p>
+              {!result.ok && <p className="mt-1 font-medium">{w("correctAnswer", { x: result.right })}</p>}
+              {result.note && <p className="mt-1 font-medium">{w("accents", { x: result.note })}</p>}
               {result.why && <p className="mt-1 max-w-xl">{result.why}</p>}
               {!result.ok && !result.why && (
                 <button
                   className="mt-1 text-sm font-medium underline"
                   onClick={async () => {
                     const given = Array.isArray(value) ? value.map((i) => bank[i]).join(" ") : ex.type === "choose" || ex.type === "fill" ? ex.choices[value as number] : String(value);
-                    const r = await post<{ why: string }>("/api/explain", { name: t.course.name, from: t.from ?? "English", prompt: ex.prompt, right: result.right, given }).catch(() => ({ why: "Pip couldn’t explain this one right now." }));
+                    const r = await post<{ why: string }>("/api/explain", { name: t.course.name, from: t.from ?? "English", prompt: ex.prompt, right: result.right, given }).catch(() => ({ why: w("whyFail") }));
                     setResult({ ...result, why: r.why });
                   }}
                 >
-                  Why?
+                  {w("why")}
                 </button>
               )}
             </div>
           ) : (
-            <button className="btn btn-ghost hidden sm:inline-flex" onClick={() => answer({ ...grade(ex, null, bank), ok: false })} disabled={ex.type === "pairs"}>Skip</button>
+            <button className="btn btn-ghost hidden sm:inline-flex" onClick={() => answer({ ...grade(ex, null, bank), ok: false })} disabled={ex.type === "pairs"}>{w("skip")}</button>
           )}
           {ex.type !== "pairs" || result ? (
             <button id="lesson-check" autoFocus={!!result} className={`btn w-full sm:w-48 ${result ? (result.ok ? "btn-good" : "btn-bad") : "btn-sea"}`} disabled={!result && empty} onClick={result ? next : check}>
-              {result ? "Continue" : "Check"}
+              {result ? w("continue") : w("check")}
             </button>
           ) : null}
         </div>
@@ -197,9 +199,9 @@ export default function Lesson() {
         <div className="fixed inset-0 z-10 grid place-items-center bg-black/50 p-5" role="dialog" aria-modal="true" aria-labelledby="quit-title">
           <div className="pop card flex w-full max-w-sm flex-col items-center gap-4 p-6 text-center">
             <Pip mood="sad" size={110} />
-            <h2 id="quit-title" className="text-xl">Wait, don’t go! You’ll lose your progress in this lesson.</h2>
-            <button autoFocus className="btn btn-sea w-full" onClick={() => setQuit(false)}>Keep learning</button>
-            <Link to="/learn" className="font-medium text-bad-ink">End session</Link>
+            <h2 id="quit-title" className="text-xl">{w("quitTitle")}</h2>
+            <button autoFocus className="btn btn-sea w-full" onClick={() => setQuit(false)}>{w("keepLearning")}</button>
+            <Link to="/learn" className="font-medium text-bad-ink">{w("endSession")}</Link>
           </div>
         </div>
       )}

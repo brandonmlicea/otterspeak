@@ -10,4 +10,5 @@ export default [
   route("api/course", "routes/api.course.ts"),
   route("api/lesson", "routes/api.lesson.ts"),
   route("api/explain", "routes/api.explain.ts"),
+  route("api/ui", "routes/api.ui.ts"),
 ] satisfies RouteConfig;

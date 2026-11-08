@@ -1,3 +1,5 @@
+import { EN, type Key } from "./en";
+
 export type Course = { id: string; name: string; lang?: string; hue: number; mark: string };
 
 export const COURSES: Course[] = [
@@ -21,30 +23,37 @@ export const COURSES: Course[] = [
 
 export const custom = (topic: string): Course => ({ id: `topic:${topic.toLowerCase().trim().replace(/\s+/g, "-")}`, name: topic.trim(), hue: 280, mark: topic.trim().slice(0, 1).toUpperCase() });
 
-export const levelsFor = (c: Course) =>
-  c.lang
-    ? [`I'm new to ${c.name}`, "I know some common words", "I can have basic conversations", "I can talk about various topics", "I can discuss most topics in detail"]
-    : c.id === "math"
-      ? ["Counting and adding", "Times tables and fractions", "Pre-algebra", "Algebra and geometry", "Calculus and beyond"]
-      : ["I'm brand new to this", "I know the basics", "I'm comfortable with it", "I want expert-level depth"];
+export const levelKeys = (c: Course) =>
+  (c.lang ? ["lang0", "lang1", "lang2", "lang3", "lang4"] : c.id === "math" ? ["math0", "math1", "math2", "math3", "math4"] : ["topic0", "topic1", "topic2", "topic3"]) as Key[];
+
+export const levelsFor = (c: Course) => levelKeys(c).map((k) => EN[k].replace("{course}", c.name));
 
 export const GOALS = [
-  { min: 5, xp: 10, label: "Casual" },
-  { min: 10, xp: 20, label: "Regular" },
-  { min: 15, xp: 30, label: "Serious" },
-  { min: 20, xp: 50, label: "Intense" },
-];
+  { min: 5, xp: 10, label: "casual" },
+  { min: 10, xp: 20, label: "regular" },
+  { min: 15, xp: 30, label: "serious" },
+  { min: 20, xp: 50, label: "intense" },
+] as const;
 
 export const STREAKS = [
-  { days: 7, label: "Good" },
-  { days: 14, label: "Great" },
-  { days: 30, label: "Incredible" },
-  { days: 50, label: "Unstoppable" },
+  { days: 7, label: "good" },
+  { days: 14, label: "great" },
+  { days: 30, label: "incredible" },
+  { days: 50, label: "unstoppable" },
+] as const;
+
+export const SPEAKS: [string, string][] = [
+  ["English", "English"], ["Spanish", "Español"], ["Portuguese", "Português"], ["French", "Français"], ["German", "Deutsch"],
+  ["Italian", "Italiano"], ["Dutch", "Nederlands"], ["Swedish", "Svenska"], ["Norwegian", "Norsk"], ["Danish", "Dansk"],
+  ["Finnish", "Suomi"], ["Polish", "Polski"], ["Czech", "Čeština"], ["Slovak", "Slovenčina"], ["Hungarian", "Magyar"],
+  ["Romanian", "Română"], ["Greek", "Ελληνικά"], ["Turkish", "Türkçe"], ["Russian", "Русский"], ["Ukrainian", "Українська"],
+  ["Arabic", "العربية"], ["Hebrew", "עברית"], ["Persian", "فارسی"], ["Hindi", "हिन्दी"], ["Bengali", "বাংলা"],
+  ["Urdu", "اردو"], ["Punjabi", "ਪੰਜਾਬੀ"], ["Tamil", "தமிழ்"], ["Telugu", "తెలుగు"], ["Marathi", "मराठी"],
+  ["Chinese", "中文"], ["Japanese", "日本語"], ["Korean", "한국어"], ["Vietnamese", "Tiếng Việt"], ["Thai", "ไทย"],
+  ["Indonesian", "Bahasa Indonesia"], ["Malay", "Bahasa Melayu"], ["Filipino", "Filipino"], ["Swahili", "Kiswahili"], ["Catalan", "Català"],
 ];
 
-export const SPEAKS = ["English", "Spanish", "Portuguese", "French", "German", "Italian", "Hindi", "Chinese", "Japanese", "Korean", "Arabic", "Russian", "Turkish", "Dutch"];
-
-export const SOURCES = ["Friends or family", "Google Search", "YouTube", "TikTok", "Instagram or Facebook", "News, article or blog", "GitHub", "Podcast", "Other"];
+export const SOURCES = ["src0", "src1", "src2", "src3", "src4", "src5", "src6", "src7", "src8"] as const;
 
 export function Mark({ c, size = 56 }: { c: Course; size?: number }) {
   return (

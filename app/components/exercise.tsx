@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Exercise } from "~/lib/store";
+import type { Say } from "~/lib/words";
 import { Says } from "./pip";
 import { Speaker, matches, speak } from "./ui";
 
@@ -7,9 +8,6 @@ export type Value = number | number[] | string | null;
 
 const shuffle = <T,>(xs: T[]) => xs.map((x) => [Math.random(), x] as const).sort((a, b) => a[0] - b[0]).map(([, x]) => x);
 const joiner = (tiles: string[]) => (tiles.some((t) => /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/u.test(t)) ? "" : " ");
-
-export const titleOf = (ex: Exercise, course: string) =>
-  ({ choose: "Select the correct answer", fill: "Fill in the blank", build: "Translate this sentence", type: `Type the answer`, pairs: "Tap the matching pairs" })[ex.type] ?? course;
 
 export function bankOf(ex: Exercise) {
   return ex.type === "build" ? shuffle([...ex.tiles, ...ex.extra]) : [];
@@ -26,7 +24,7 @@ export function grade(ex: Exercise, value: Value, bank: string[]): { ok: boolean
   return { ok: true, right: "" };
 }
 
-export function Exercise({ ex, lang, bank, locked, value, set, solved }: { ex: Exercise; lang?: string; bank: string[]; locked: boolean; value: Value; set: (v: Value) => void; solved: () => void }) {
+export function Exercise({ w, ex, lang, bank, locked, value, set, solved }: { w: Say; ex: Exercise; lang?: string; bank: string[]; locked: boolean; value: Value; set: (v: Value) => void; solved: () => void }) {
   const say = "say" in ex ? ex.say : undefined;
   useEffect(() => {
     if (say) speak(say, lang);
@@ -35,7 +33,7 @@ export function Exercise({ ex, lang, bank, locked, value, set, solved }: { ex: E
   const prompt = (
     <Says size={84}>
       <span className="flex items-center gap-3">
-        {say && <Speaker text={say} lang={lang} />}
+        {say && <Speaker text={say} lang={lang} label={w("listen")} />}
         <span>{ex.type === "fill" ? ex.prompt.replace("___", value !== null ? `[${ex.choices[value as number]}]` : "____") : ex.prompt}</span>
       </span>
     </Says>
@@ -86,7 +84,7 @@ export function Exercise({ ex, lang, bank, locked, value, set, solved }: { ex: E
           value={(value as string) ?? ""}
           onChange={(e) => set(e.target.value)}
           lang={lang}
-          placeholder="Type your answer"
+          placeholder={w("typeHere")}
           className="mt-8 h-36 w-full resize-none rounded-2xl border border-line bg-surface p-4 text-lg outline-none focus:border-sea"
         />
       </>

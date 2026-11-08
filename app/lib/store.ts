@@ -26,6 +26,7 @@ export type State = {
   name: string;
   words: string[];
   seen: { quests: string; profile: boolean };
+  ui: Record<string, Record<string, string>>;
 };
 
 export const MAX_HEARTS = 5;
@@ -50,6 +51,7 @@ const fresh = (): State => ({
   name: "",
   words: [],
   seen: { quests: "", profile: false },
+  ui: {},
 });
 
 let cache: State | null = null;
@@ -102,11 +104,11 @@ export function useStore(): State | null {
 
 export const track = (s: State) => (s.active ? s.tracks[s.active] : undefined);
 
-export function quests(s: State) {
+export function quests(s: State): { key: "questXp" | "questLessons" | "questRun"; have: number; need: number }[] {
   return [
-    { label: `Earn ${s.goal} XP`, have: s.day.xp, need: s.goal },
-    { label: "Complete 2 lessons", have: s.day.lessons, need: 2 },
-    { label: "Get 10 in a row correct", have: s.day.best, need: 10 },
+    { key: "questXp", have: s.day.xp, need: s.goal },
+    { key: "questLessons", have: s.day.lessons, need: 2 },
+    { key: "questRun", have: s.day.best, need: 10 },
   ];
 }
 

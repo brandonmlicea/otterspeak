@@ -4,7 +4,7 @@
 
 Live: https://otterspeak.brandonlicea61.workers.dev · Landing: https://otterspeak-landing.brandonlicea61.workers.dev ([source](https://github.com/brandonmlicea/otterspeak-landing))
 
-- **Lessons in your language.** Pip asks which language you already speak, writes every instruction in it, and names the direction of each exercise ("Translate into Spanish: …"). A second, quick pass checks each exercise and drops the ones with a wrong or missing answer.
+- **Everything in your language.** Pip asks which of 40 languages you already speak. The whole interface switches to it (translated once by the model, proofread, then cached), Pip writes every instruction in it, and names the direction of each exercise ("Translate into Spanish: …"). A second, quick pass checks each exercise and drops the ones with a wrong or missing answer.
 - **The whole learning loop.** Pick a course, meet Pip, set your language, level and daily goal, then learn on a path of units and lessons. After your first lesson you set a streak goal and a profile.
 - **Five kinds of exercise.** Pick the answer, fill the blank, build a sentence from word tiles, type the answer, match the pairs. Mistakes come back at the end of the lesson, accents are forgiven with a hint, "Why?" asks Pip to explain, and language prompts are read aloud with the browser's own voices.
 - **Game loop.** XP, streaks with a streak goal, 5 hearts that refill one every 30 minutes (or by practising), three daily quests, and a perfect-lesson bonus.

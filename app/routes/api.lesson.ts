@@ -66,18 +66,18 @@ Rules:
 - Each exercise has exactly one right answer, the right answer is always among the choices, and the wrong choices are clearly wrong.
 "words" lists the key ${lang ? `${name} words` : "terms"} this lesson teaches.`;
     const user = `Course: ${name}\nLevel: ${level}\nUnit: ${unit}\nLesson focus: ${focus}${words.length ? `\nWords the learner already met (reuse some for review): ${words.join(", ")}` : ""}${review ? "\nThis is a review lesson: practise only what the learner already met." : ""}`;
-    const audit = `You check exercises written for a ${name} lesson for a learner who speaks ${from}. Reply with one JSON object only: {"bad":[indexes]}. List an exercise's index when its right answer is wrong, a choice other than the right one is also correct, the right answer is missing from the choices, its ${lang ? `${name} has a mistake, ` : ""}or its prompt is unclear about what to do. List nothing else.`;
+    const audit = `You check exercises written for a ${name} lesson for a learner who speaks ${from}. Reply with one JSON object only: {"bad":[indexes]}. List an exercise's index when its right answer is wrong, another choice could also be accepted (a synonym or another normal way to say it), the right answer is missing from the choices, its ${lang ? `${name} has a mistake, ` : ""}or its prompt is unclear about what to do. List nothing else.`;
     const make = async (): Promise<Lesson> => {
       for (let attempt = 0; attempt < 2; attempt++) {
         const raw = await askJson(system, user, 3000);
         const drafted = (Array.isArray(raw.exercises) ? raw.exercises : []).map((e: Record<string, unknown>) => clean(e, !!lang)).filter((e): e is Exercise => !!e).slice(0, 12);
         const shown = drafted.map((e, i) => `${i}. ${JSON.stringify("choices" in e ? { ...e, right: e.choices[e.answer] } : e)}`).join("\n");
-        const verdict = drafted.length ? await askJson(audit, shown, 300).catch(() => ({ bad: [] })) : { bad: [] };
+        const verdict = drafted.length ? await askJson(audit, shown, 300, 0.1).catch(() => ({ bad: [] })) : { bad: [] };
         const bad = new Set((Array.isArray(verdict.bad) ? verdict.bad : []).map(Number));
         const exercises = drafted.filter((_, i) => !bad.has(i));
         if (exercises.length >= 6) return { exercises, words: texts(raw.words, 40).slice(0, 12) };
       }
       throw new Refusal("The lesson came back short. Try again.", 502);
     };
-    return review ? make() : cached(`lesson:v4:${from}:${name}:${level}:${unit}:${focus}`, make);
+    return review ? make() : cached(`lesson:v5:${from}:${name}:${level}:${unit}:${focus}`, make);
   });

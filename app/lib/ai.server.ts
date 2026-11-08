@@ -16,7 +16,7 @@ export async function guard(request: Request) {
   return (await request.json()) as Record<string, unknown>;
 }
 
-export async function askJson(system: string, user: string, maxTokens: number): Promise<Record<string, unknown>> {
+export async function askJson(system: string, user: string, maxTokens: number, warmth = 0.7): Promise<Record<string, unknown>> {
   const base = (vars.AI_BASE_URL || "https://inference.celeris.ai/celeris-1/v1").replace(/\/+$/, "");
   if (!vars.AI_API_KEY) throw new Refusal("No AI key yet. Put AI_API_KEY in .dev.vars (or run wrangler secret put AI_API_KEY).", 503);
   for (let attempt = 0; ; attempt++) {
@@ -26,7 +26,7 @@ export async function askJson(system: string, user: string, maxTokens: number): 
       body: JSON.stringify({
         model: vars.AI_MODEL || "celeris-1",
         max_tokens: maxTokens,
-        temperature: attempt ? 0.4 : 0.7,
+        temperature: attempt ? Math.min(warmth, 0.4) : warmth,
         ...(base.includes("celeris.ai") ? { chat_template_kwargs: { enable_thinking: false } } : {}),
         messages: [
           { role: "system", content: system },

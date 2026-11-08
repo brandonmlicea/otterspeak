@@ -38,10 +38,10 @@ export function Heart({ on = true, size = 24 }: { on?: boolean; size?: number })
   );
 }
 
-export function Speaker({ text, lang }: { text: string; lang?: string }) {
+export function Speaker({ text, lang, label = "Listen" }: { text: string; lang?: string; label?: string }) {
   if (!lang) return null;
   return (
-    <button type="button" onClick={() => speak(text, lang)} aria-label="Listen" className="btn btn-sea size-12 shrink-0 px-0">
+    <button type="button" onClick={() => speak(text, lang)} aria-label={label} className="btn btn-sea size-12 shrink-0 px-0">
       <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden>
         <path d="M4 9h4l5-4v14l-5-4H4z" />
         <path d="M16 8a5 5 0 0 1 0 8M18.5 5.5a8.5 8.5 0 0 1 0 13" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
@@ -73,5 +73,5 @@ const bare = (s: string) => loose(s).normalize("NFD").replace(/\p{M}/gu, "").rep
 export function matches(given: string, accepted: string[]) {
   if (accepted.some((a) => loose(a).replace(/\s/g, "") === loose(given).replace(/\s/g, ""))) return { ok: true };
   const close = accepted.find((a) => bare(a) === bare(given));
-  return close ? { ok: true, note: `Mind the accents: ${close}` } : { ok: false };
+  return close ? { ok: true, note: close } : { ok: false };
 }
